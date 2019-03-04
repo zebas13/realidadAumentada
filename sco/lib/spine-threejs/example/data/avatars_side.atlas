@@ -1,0 +1,125 @@
+
+avatars_side.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+normal2/side_arm1
+  rotate: true
+  xy: 231, 88
+  size: 90, 123
+  orig: 90, 123
+  offset: 0, 0
+  index: -1
+normal2/side_arm2
+  rotate: true
+  xy: 606, 137
+  size: 61, 137
+  orig: 61, 137
+  offset: 0, 0
+  index: -1
+normal2/side_body1
+  rotate: false
+  xy: 122, 100
+  size: 107, 154
+  orig: 107, 154
+  offset: 0, 0
+  index: -1
+normal2/side_body2
+  rotate: false
+  xy: 2, 55
+  size: 118, 199
+  orig: 118, 199
+  offset: 0, 0
+  index: -1
+normal2/side_foot1
+  rotate: false
+  xy: 122, 54
+  size: 87, 44
+  orig: 87, 44
+  offset: 0, 0
+  index: -1
+normal2/side_foot2
+  rotate: false
+  xy: 2, 5
+  size: 86, 48
+  orig: 86, 48
+  offset: 0, 0
+  index: -1
+normal2/side_forearm1
+  rotate: false
+  xy: 356, 55
+  size: 68, 123
+  orig: 68, 123
+  offset: 0, 0
+  index: -1
+normal2/side_forearm2
+  rotate: false
+  xy: 426, 89
+  size: 108, 91
+  orig: 108, 91
+  offset: 0, 0
+  index: -1
+normal2/side_hand1
+  rotate: false
+  xy: 536, 102
+  size: 62, 78
+  orig: 62, 78
+  offset: 0, 0
+  index: -1
+normal2/side_hand1_b
+  rotate: true
+  xy: 822, 163
+  size: 36, 76
+  orig: 36, 76
+  offset: 0, 0
+  index: -1
+normal2/side_hand2
+  rotate: false
+  xy: 745, 137
+  size: 75, 61
+  orig: 75, 61
+  offset: 0, 0
+  index: -1
+normal2/side_head
+  rotate: true
+  xy: 426, 2
+  size: 85, 98
+  orig: 85, 98
+  offset: 0, 0
+  index: -1
+normal2/side_leg1
+  rotate: true
+  xy: 418, 182
+  size: 72, 186
+  orig: 72, 186
+  offset: 0, 0
+  index: -1
+normal2/side_leg2
+  rotate: true
+  xy: 231, 180
+  size: 74, 185
+  orig: 74, 185
+  offset: 0, 0
+  index: -1
+normal2/side_neck
+  rotate: true
+  xy: 900, 150
+  size: 49, 52
+  orig: 49, 52
+  offset: 0, 0
+  index: -1
+normal2/side_shin1
+  rotate: true
+  xy: 606, 200
+  size: 54, 196
+  orig: 54, 196
+  offset: 0, 0
+  index: -1
+normal2/side_shin2
+  rotate: true
+  xy: 804, 201
+  size: 53, 196
+  orig: 53, 196
+  offset: 0, 0
+  index: -1

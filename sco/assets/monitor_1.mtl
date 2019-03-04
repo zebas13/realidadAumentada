@@ -1,0 +1,28 @@
+newmtl monitor_export:Mat
+illum 4
+Kd 0.75 0.75 0.75
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl monitor_export:Mat_1
+illum 4
+Kd 0.12 0.12 0.12
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.12 0.12 0.12
+Ns 100.00
+newmtl monitor_export:Mat_3
+illum 4
+Kd 0.19 0.19 0.19
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.73 0.73 0.73
+Ns 52.00
+newmtl monitor_export:default1
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+Ni 1.00
