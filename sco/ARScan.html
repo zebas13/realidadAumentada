@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<!-- three.js library -->
+<script src='three.js/examples/vendor/three.js/build/three.min.js'></script>
+<script src="three.js/examples/vendor/three.js/examples/js/libs/stats.min.js"></script>
+<!-- ar.js -->
+<script src="three.js/build/ar.js"></script>
+<script src="js/spriteSheet.js"></script>
+<script src="js/spineController.js"></script>
+<script src="lib/spine-threejs/spine-js/spine.js"></script>
+<script>THREEx.ArToolkitContext.baseURL = 'three.js/'</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+  <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+      
+  	<div style="position:absolute; top:100%;" >
+  		<video id="videoElement" src="assets/GBF_demo.mp4" width="320" height="240" playsinline loop autoplay muted style="display:none" >
+		 
+		</video>
+  	</div>
+  	<div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
+  	</div>
+    
+  	
+  	<script type="text/javascript">
+        alert("change 3")
+  		window.addEventListener("touchstart",function(){
+  			console.log("touch window")
+  			videoElement.play();
+  		},false)
+
+  		var videoElement = document.getElementById("videoElement");
+
+  		videoElement.playsinline = true;
+		videoElement.muted = true;
+		videoElement.autoplay=true;
+		videoElement.load();
+		
+  		//videoElement.play();
+  		var currentMarkers = []
+  		var currentAnim = "";
+  		function FindMarker(markerId){
+  			
+  			if(currentAnim != markerId){
+  				videoElement.pause();
+  				currentAnim = markerId;
+  				loadSpine(arWorldRoot,currentAnim)
+  			}
+
+  			if(currentMarkers.indexOf(markerId) ==-1){
+  				console.log("findMarker with name ",markerId)
+  				currentMarkers.push(markerId)
+  			}
+  		}
+  		
+  		//////////////////////////////////////////////////////////////////////////////////
+		 // Init
+		 //////////////////////////////////////////////////////////////////////////////////
+
+		// init renderer
+		 var renderer = new THREE.WebGLRenderer({
+		 // antialias : true,
+		 alpha: true
+		 });
+		 renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+		 // renderer.setPixelRatio( 1/2 );
+		 renderer.setSize( window.innerWidth, window.innerHeight );
+		 renderer.domElement.style.position = 'absolute'
+		 renderer.domElement.style.top = '0px'
+		 renderer.domElement.style.left = '0px'
+		 document.body.appendChild( renderer.domElement );
+
+		// array of functions for the rendering loop
+		 var onRenderFcts= [];
+
+		// init scene and camera
+		 var scene = new THREE.Scene();
+
+		var ambient = new THREE.AmbientLight( 0x666666 );
+		 scene.add( ambient );
+
+		var directionalLight = new THREE.DirectionalLight( 0x887766 );
+		 directionalLight.position.set( -1, 1, 1 ).normalize();
+		 scene.add( directionalLight );
+
+		 //////////////////////////////////////////////////////////////////////////////////
+		 // Initialize a basic camera
+		 //////////////////////////////////////////////////////////////////////////////////
+
+		// Create a camera
+		 var camera = new THREE.Camera();
+		 camera.position.z = 200;
+		 scene.add(camera);
+
+		 ////////////////////////////////////////////////////////////////////////////////
+		 // handle arToolkitSource
+		 ////////////////////////////////////////////////////////////////////////////////
+
+		var arToolkitSource = new THREEx.ArToolkitSource({
+		 // to read from the webcam
+		 sourceType : 'webcam',
+
+		// to read from an image
+		 // sourceType : 'image',
+		 // sourceUrl : '../../data/images/img.jpg',
+
+		// to read from a video
+		 // sourceType : 'video',
+		 // sourceUrl : '../../data/videos/headtracking.mp4',
+
+		sourceWidth: 80*3,
+		 sourceHeight: 60*3,
+		 })
+
+		arToolkitSource.init(function onReady(){
+		 // handle resize of renderer
+		 arToolkitSource.onResize(renderer.domElement)
+		 })
+
+		// handle resize
+		 window.addEventListener('resize', function(){
+		 // handle arToolkitSource resize
+		 arToolkitSource.onResize(renderer.domElement)
+		 })
+
+		 ///////////////////////////////////////////////////////////////////////////////
+		 // initialize arToolkitContext
+		 ////////////////////////////////////////////////////////////////////////////////
+
+		// create atToolkitContext
+		 var arToolkitContext = new THREEx.ArToolkitContext({
+		 cameraParametersUrl: 'data/data/camera_para.dat',
+		 detectionMode: 'mono',
+		 imageSmoothingEnabled: false,
+		 maxDetectionRate: 30,
+		 sourceWidth: arToolkitSource.parameters.sourceWidth,
+		 sourceHeight: arToolkitSource.parameters.sourceHeight,
+		 })
+		 // initialize it
+		 arToolkitContext.init(function onCompleted(){
+		 // copy projection matrix to camera
+		 camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+		 })
+
+		// update artoolkit on every frame
+		 onRenderFcts.push(function(){
+		 if( arToolkitSource.ready === false ) return
+
+		arToolkitContext.update( arToolkitSource.domElement )
+		 })
+
+		 ////////////////////////////////////////////////////////////////////////////////
+		 // Create a ArMarkerControls
+		 ////////////////////////////////////////////////////////////////////////////////
+
+		var markerRoot = new THREE.Group
+		 scene.add(markerRoot)
+		 var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+		 //type : 'barcode',
+		 //value:5,
+		 type:'pattern',
+		 patternUrl:'data/data/pattern_1.patt',
+		 nameId:'ar1'
+		 // patternUrl : '../../data/data/patt.kanji'
+		 })
+
+		 var artoolkitMarker2 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+		 //type : 'barcode',
+		 //value:5,
+		 type:'pattern',
+		 patternUrl:'data/data/pattern_1B.patt',
+		 nameId:'ar1B'
+		 // patternUrl : '../../data/data/patt.kanji'
+		 })
+         
+		 var artoolkitMarker3 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+		 //type : 'barcode',
+		 //value:5,
+		 type:'pattern',
+		 patternUrl:'data/data/pattern-ex.patt',
+		 nameId:'ar2'
+		 // patternUrl : '../../data/data/patt.kanji'
+		 })
+
+		 // build a smoothedControls
+	var smoothedRoot = new THREE.Group()
+	scene.add(smoothedRoot)
+	var smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
+		lerpPosition: 0.4,
+		lerpQuaternion: 0.3,
+		lerpScale: 1,
+	})
+	onRenderFcts.push(function(delta){
+		smoothedControls.update(markerRoot)
+	})
+		 //////////////////////////////////////////////////////////////////////////////////
+	 // add an object in the scene
+	 //////////////////////////////////////////////////////////////////////////////////
+
+
+	var arWorldRoot = smoothedRoot
+	/*var texture = new THREE.TextureLoader().load( "assets/testSpriteSheet.png" );
+	CreateSpriteSheets(texture,[{anim:"loop",frames:[21,22,23,24,25,26,27,14,15,16,17,18,19,20,7,8,9,10,11,12,13,0,1,2,3,4,5],speed:0.05,onComplete:null}],74.3,87,520,347);
+
+	//CreateSpriteSheets(texture,[{anim:"loop",frames:[15],speed:1,onComplete:null}],74.2,87,520,347);
+	var material = new THREE.MeshBasicMaterial({map: texture});
+    var geometry = new THREE.PlaneGeometry(2, 2);
+    var mesh = new THREE.Mesh(geometry, material);
+   	mesh.rotation.x = -Math.PI/2;
+    mesh.position.y =0.1;
+    arWorldRoot.add(mesh)*/
+
+    //El de buena 
+    var texture = new THREE.TextureLoader().load( "assets/ar1Bad_sky.png" );
+   	var material = new THREE.MeshBasicMaterial({map: texture});
+    var geometry = new THREE.PlaneGeometry(200, 220);
+    var ar1BadMesh = new THREE.Mesh(geometry, material);
+    ar1BadMesh.rotation.x = -Math.PI/2;
+    ar1BadMesh.position.y=-200;
+    ar1BadMesh.position.z = -10;
+    arWorldRoot.add(ar1BadMesh);
+
+        
+/*
+        //Hiro
+    var texture = new THREE.TextureLoader().load( "assets/raul.jpg" );
+   	var material = new THREE.MeshBasicMaterial({map: texture});
+    var geometry = new THREE.PlaneGeometry(200, 220);
+    var ar2Mesh = new THREE.Mesh(geometry, material);
+    ar2Mesh.rotation.x = -Math.PI/2;
+    ar2Mesh.position.y=-200;
+    ar2Mesh.position.z = -10;
+    arWorldRoot.add(ar2Mesh);          
+*/        
+        
+  
+        
+        //el codigo de malo 
+    var texture = new THREE.VideoTexture(videoElement);
+    texture.minFilter = THREE.LinearFilter;
+	texture.magFilter = THREE.LinearFilter;
+	texture.format = THREE.RGBFormat;
+   	var material = new THREE.MeshBasicMaterial({map: texture});
+    var geometry = new THREE.PlaneGeometry(400, 100);
+    var videoMesh = new THREE.Mesh(geometry, material);
+    videoMesh.rotation.x = -Math.PI/2;
+    videoMesh.position.y=-200;
+    videoMesh.position.z = -10;
+    videoMesh.visible = false;
+    arWorldRoot.add(videoMesh);
+
+        
+      
+        
+    //loadSpine(arWorldRoot)
+	onRenderFcts.push(function(delta){
+		
+	 if(anim!=null){
+	 	//anim.rotation.z += 0.1
+		 anim.update(delta)
+	}
+	 //texture.update(delta)
+
+	 })
+
+	//////////////////////////////////////////////////////////////////////////////////
+	 // render the whole thing on the page
+	 //////////////////////////////////////////////////////////////////////////////////
+	 //var stats = new Stats();
+	 //document.body.appendChild( stats.dom );
+	 // render the scene
+	 onRenderFcts.push(function(){
+	 renderer.render( scene, camera );
+	 //stats.update();
+	 })
+
+	// run the rendering loop
+	 var lastTimeMsec= null
+	 requestAnimationFrame(function animate(nowMsec){
+	 // keep looping
+	 requestAnimationFrame( animate );
+	 // measure time
+	 lastTimeMsec = lastTimeMsec || nowMsec-1000/60
+	 var deltaMsec = Math.min(200, nowMsec - lastTimeMsec)
+	 lastTimeMsec = nowMsec
+	 // call each update function
+	 onRenderFcts.forEach(function(onRenderFct){
+	 onRenderFct(deltaMsec/1000, nowMsec/1000)
+	 })
+	 })
+
+  	</script>
+  	<script type="text/javascript" src="api_scorm.js"></script>
+  	<script>
+  		initCourse();
+  	</script>
+  </body>
+</html>

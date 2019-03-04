@@ -1,0 +1,70 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<!-- three.js library -->
+<script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+<script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+<script src="js/videoactions.js"></script>
+<script src="js/videoactions.js"></script>
+<link rel="stylesheet" href="css/style.css">
+    
+<body style="margin : 0px; overflow: hidden;">
+   
+    
+  <a-scene embedded arjs="sourceType: webcam;">
+
+      <a-marker  type='pattern' preset='custom' url='data/data/pattern_1.patt'>
+          <!--Aqui esta el cubo solo hay que mandarlo a llamar, el de arriba es el patt -->
+        <a-box position='0 0.5 0' material='opacity: 0.5;'></a-box>
+
+        </a-marker>
+      
+
+        <a-marker preset='kanji'>
+
+          
+        <a-entity scale="0.07 0.07 0.07" rotation="-90 90 -90" obj-model="obj: url(assets/Cartel_mini_GM.obj); mtl: url(assets/Cartel_mini_GM.mtl)">
+        </a-entity>
+
+      </a-marker>
+
+
+      <a-assets> <!--Se precargan los videos -->
+          <video id="vid" src="assets/GBF_1.2.1_demo_baja.mp4" loop="true" crossorigin></video>
+          <video id="vid2" src="assets/GBF_1.2.1_demo2.mp4" loop="true" crossorigin></video>
+      </a-assets> 
+     
+    <!--Aquí se cambian los patt -->
+    <a-marker  type='pattern' preset='custom' url='data/data/pattern-marker.patt' vidhandler>
+    
+      <a-entity position='0 0 0' scale="0.05 0.05 0.05" rotation="-90 90 -90"  obj-model="obj: url(assets/monitor_barcel.obj); mtl: url(assets/monitor_barcel.mtl)">
+        </a-entity>      
+        
+
+      <a-plane position='0.15 0.2 -0.55' scale="1.84 2.07 2" width="2" rotation="-90 0 0" 
+       material='transparent:true; opacity: 1; src:#vid'></a-plane>
+
+    </a-marker> 
+      
+    <a-marker  type='pattern' preset='custom' url='data/data/pattern-marker2.patt' vidhandler2>
+    
+      <a-entity position='0 0 0' scale="0.05 0.05 0.05" rotation="-90 90 -90"  obj-model="obj: url(assets/monitor_barcel.obj); mtl: url(assets/monitor_barcel.mtl)">
+        </a-entity>      
+        
+
+      <a-plane position='0.15 0.2 -0.55' scale="1.84 2.07 2" width="2" rotation="-90 0 0" 
+       material='transparent:true; opacity: 1; src:#vid2'></a-plane>
+
+    </a-marker>      
+
+      
+<a-entity camera></a-entity>   
+  </a-scene>
+    
+  
+</body>
+
+</html>
